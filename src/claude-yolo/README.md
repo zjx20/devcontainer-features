@@ -34,6 +34,35 @@ This is equivalent to:
 claude --dangerously-skip-permissions
 ```
 
+## Setup Tips
+
+`claude-yolo` only installs the alias. A practical setup is to use Anthropic's official feature to install Claude Code, and add the official Node feature first when the base image does not already include a working Node.js environment:
+
+```jsonc
+{
+  "features": {
+    "ghcr.io/devcontainers/features/node:2": {},
+    "ghcr.io/anthropics/devcontainer-features/claude-code:1.0": {},
+    "ghcr.io/zjx20/devcontainer-features/claude-yolo:1": {}
+  }
+}
+```
+
+## Shared State
+
+If you want to share Claude state from the host, you can mount the host's `~/.claude` directory into a fixed container path and point `CLAUDE_CONFIG_DIR` at it:
+
+```jsonc
+{
+  "mounts": [
+    "source=${localEnv:HOME}/.claude,target=/claude-config,type=bind"
+  ],
+  "containerEnv": {
+    "CLAUDE_CONFIG_DIR": "/claude-config"
+  }
+}
+```
+
 ## Options
 
 This feature has no options.
