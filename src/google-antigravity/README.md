@@ -1,10 +1,18 @@
 # Google Antigravity CLI Feature
 
-A [Dev Container Feature](https://containers.dev/implementors/features/) that installs the Google Antigravity CLI with the official installer:
+A [Dev Container Feature](https://containers.dev/implementors/features/) that installs the Google Antigravity CLI with the official installer and adds a shell alias:
 
 ```sh
-curl -fsSL https://antigravity.google/cli/install.sh | bash
+alias agy-yolo='agy --dangerously-skip-permissions'
 ```
+
+The CLI is installed with:
+
+```sh
+curl -fsSL https://antigravity.google/cli/install.sh | bash -s -- -d /usr/local/bin
+```
+
+Installing to `/usr/local/bin` makes `agy` available to all users in the container instead of only the user that ran the installer.
 
 ## Dependency Handling
 
@@ -31,9 +39,34 @@ Add the feature to your `devcontainer.json`:
 }
 ```
 
-## State Sharing
+Then inside the container:
 
-This feature currently only installs the CLI. Host-to-container state sharing is not documented yet and can be added later once the CLI's state layout is confirmed.
+```sh
+agy-yolo
+```
+
+This is equivalent to:
+
+```sh
+agy --dangerously-skip-permissions
+```
+
+## Shared State
+
+If you want to share Google Antigravity state from the host, do not mount directly to a user-specific home path because the container username may vary.
+
+Instead, mount the host directory to a fixed location and create a symlink into the active user's home directory from a Dev Container lifecycle command:
+
+```jsonc
+{
+  "mounts": [
+    "source=${localEnv:HOME}/.gemini/,target=/gemini-home/,type=bind"
+  ],
+  "postStartCommand": "ln -snf /gemini-home \"$HOME/.gemini\""
+}
+```
+
+This keeps the mount target stable while still making `~/.gemini` available to whichever user starts the container.
 
 ## Options
 

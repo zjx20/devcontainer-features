@@ -2,7 +2,7 @@
     "name": "Google Antigravity CLI",
     "id": "google-antigravity",
     "version": "1.0.0",
-    "description": "Installs the Google Antigravity CLI.",
+    "description": "Installs the Google Antigravity CLI and adds an 'agy-yolo' shell alias that runs 'agy --dangerously-skip-permissions'.",
     "documentationURL": "https://raw.githubusercontent.com/zjx20/devcontainer-features/main/src/google-antigravity/README.md",
     "options": {}
 }

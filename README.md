@@ -8,7 +8,7 @@ This repository is a collection of reusable [Dev Container Features](https://con
 | --- | --- | --- |
 | `claude-yolo` | Adds a `claude-yolo` shell alias that runs `claude --dangerously-skip-permissions`. | [src/claude-yolo/README.md](src/claude-yolo/README.md) |
 | `codex-yolo` | Installs the Codex CLI and adds a `codex-yolo` shell alias for bypass mode. | [src/codex-yolo/README.md](src/codex-yolo/README.md) |
-| `google-antigravity` | Installs the Google Antigravity CLI. | [src/google-antigravity/README.md](src/google-antigravity/README.md) |
+| `google-antigravity` | Installs the Google Antigravity CLI and adds an `agy-yolo` alias. | [src/google-antigravity/README.md](src/google-antigravity/README.md) |
 
 ## Repository Layout
 
