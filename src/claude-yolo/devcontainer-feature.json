@@ -1,7 +1,7 @@
 {
     "name": "Claude YOLO",
     "id": "claude-yolo",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Adds a 'claude-yolo' shell alias that runs 'claude --dangerously-skip-permissions'.",
     "documentationURL": "https://raw.githubusercontent.com/zjx20/devcontainer-features/main/src/claude-yolo/README.md",
     "options": {}

@@ -1,7 +1,7 @@
 {
     "name": "Codex YOLO",
     "id": "codex-yolo",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Installs the Codex CLI and adds a 'codex-yolo' shell alias that runs 'codex --dangerously-bypass-approvals-and-sandbox'.",
     "documentationURL": "https://raw.githubusercontent.com/zjx20/devcontainer-features/main/src/codex-yolo/README.md",
     "options": {}

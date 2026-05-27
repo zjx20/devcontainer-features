@@ -27,4 +27,5 @@ This repository stores reusable Dev Container Features that are published to Git
 
 - Publishing is handled centrally by GitHub Actions with `devcontainers/action`.
 - Bump the `version` in a feature's `devcontainer-feature.json` when releasing changes to that feature.
+- If a feature has a substantive change, bump its `version` in `devcontainer-feature.json` as part of the same update.
 - Preserve stable feature IDs once published, because downstream `devcontainer.json` files depend on them.
