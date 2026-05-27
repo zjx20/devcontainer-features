@@ -50,16 +50,22 @@ claude --dangerously-skip-permissions
 
 ## Shared State
 
-If you want to share Claude state from the host, you can mount the host's `~/.claude` directory into a fixed container path and point `CLAUDE_CONFIG_DIR` at it:
+If you want to share Claude state from the host, mount both `~/.claude` and `~/.claude.json` to fixed container paths.
+
+`~/.claude.json` is required if you want to reuse the host login state, but the container username may vary, so do not mount it directly to a user-specific home path.
+
+Use fixed mount targets, point `CLAUDE_CONFIG_DIR` at the mounted directory, and create a symlink for `~/.claude.json` from a Dev Container lifecycle command:
 
 ```jsonc
 {
   "mounts": [
-    "source=${localEnv:HOME}/.claude,target=/claude-config,type=bind"
+    "source=${localEnv:HOME}/.claude,target=/claude-config,type=bind",
+    "source=${localEnv:HOME}/.claude.json,target=/claude-config.json,type=bind"
   ],
   "containerEnv": {
     "CLAUDE_CONFIG_DIR": "/claude-config"
-  }
+  },
+  "postStartCommand": "ln -snf /claude-config.json \"$HOME/.claude.json\""
 }
 ```
 
