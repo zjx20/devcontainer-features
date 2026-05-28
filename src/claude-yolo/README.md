@@ -50,24 +50,35 @@ claude --dangerously-skip-permissions
 
 ## Shared State
 
-If you want to share Claude state from the host, mount both `~/.claude` and `~/.claude.json` to fixed container paths.
+Claude Code reads different config locations depending on whether `CLAUDE_CONFIG_DIR` is set:
 
-`~/.claude.json` is required if you want to reuse the host login state, but the container username may vary, so do not mount it directly to a user-specific home path.
+- With `CLAUDE_CONFIG_DIR`, it reads `~/.claude/.claude.json`.
+- Without `CLAUDE_CONFIG_DIR`, it reads `~/.claude.json`.
 
-Use fixed mount targets, point `CLAUDE_CONFIG_DIR` at the mounted directory, and create a symlink for `~/.claude.json` from a Dev Container lifecycle command:
+For dev containers, prefer setting `CLAUDE_CONFIG_DIR` and mounting the host `~/.claude` directory to a fixed container path. This avoids hard-coding the container username while still keeping Claude state shared between the host and the container.
 
 ```jsonc
 {
   "mounts": [
-    "source=${localEnv:HOME}/.claude,target=/claude-config,type=bind",
-    "source=${localEnv:HOME}/.claude.json,target=/claude-config.json,type=bind"
+    "source=${localEnv:HOME}/.claude,target=/claude-config,type=bind"
   ],
   "containerEnv": {
     "CLAUDE_CONFIG_DIR": "/claude-config"
-  },
-  "postStartCommand": "ln -snf /claude-config.json \"$HOME/.claude.json\""
+  }
 }
 ```
+
+To make this work cleanly on both the host and the dev container, adjust the host layout once:
+
+```sh
+mv ~/.claude.json ~/.claude/.claude.json
+ln -s ~/.claude/.claude.json ~/.claude.json
+```
+
+After that:
+
+- the dev container can use `CLAUDE_CONFIG_DIR=/claude-config` and read `/claude-config/.claude.json`
+- the host can continue using `~/.claude.json`
 
 ## Options
 
