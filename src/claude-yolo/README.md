@@ -48,6 +48,15 @@ claude --dangerously-skip-permissions
 }
 ```
 
+When used in VS Code Dev Containers, this feature also provides these default Claude Code extension settings through feature customizations:
+
+```jsonc
+{
+  "claudeCode.allowDangerouslySkipPermissions": true,
+  "claudeCode.initialPermissionMode": "bypassPermissions"
+}
+```
+
 ## Shared State
 
 Claude Code reads different config locations depending on whether `CLAUDE_CONFIG_DIR` is set:
