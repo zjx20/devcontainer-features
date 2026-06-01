@@ -1,7 +1,7 @@
 {
     "name": "Localhost Proxy",
     "id": "localhost-proxy",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Starts socat TCP proxies that forward localhost ports inside the dev container to host.docker.internal or other targets.",
     "documentationURL": "https://raw.githubusercontent.com/zjx20/devcontainer-features/main/src/localhost-proxy/README.md",
     "options": {

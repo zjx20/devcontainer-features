@@ -95,6 +95,8 @@ It also installs:
 
 The feature uses `postStartCommand` to run `localhost-proxy-start` every time the dev container starts. The script stops previously managed proxy processes before starting the configured mappings again, so repeated starts do not duplicate listeners.
 
+When available, the script launches `socat` with `setsid` so the proxy process is detached from the lifecycle command's process group. This makes it less likely that the dev container lifecycle runner cleans up the proxy immediately after `postStartCommand` exits.
+
 Logs and PID files are written under:
 
 ```text

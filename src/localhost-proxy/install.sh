@@ -6,30 +6,30 @@ CONFIG_FILE="$CONFIG_DIR/mappings"
 START_SCRIPT=/usr/local/bin/localhost-proxy-start
 
 install_socat() {
-    if command -v socat >/dev/null 2>&1; then
+    if command -v socat >/dev/null 2>&1 && command -v setsid >/dev/null 2>&1; then
         return 0
     fi
 
     if command -v apt-get >/dev/null 2>&1; then
         export DEBIAN_FRONTEND=noninteractive
         apt-get update
-        apt-get install -y --no-install-recommends socat ca-certificates
+        apt-get install -y --no-install-recommends socat ca-certificates util-linux
         rm -rf /var/lib/apt/lists/*
     elif command -v apk >/dev/null 2>&1; then
-        apk add --no-cache socat ca-certificates
+        apk add --no-cache socat ca-certificates util-linux
     elif command -v dnf >/dev/null 2>&1; then
-        dnf install -y socat ca-certificates
+        dnf install -y socat ca-certificates util-linux
         dnf clean all
     elif command -v microdnf >/dev/null 2>&1; then
-        microdnf install -y socat ca-certificates
+        microdnf install -y socat ca-certificates util-linux
         microdnf clean all
     elif command -v yum >/dev/null 2>&1; then
-        yum install -y socat ca-certificates
+        yum install -y socat ca-certificates util-linux
         yum clean all
     elif command -v pacman >/dev/null 2>&1; then
-        pacman -Sy --noconfirm --needed socat ca-certificates
+        pacman -Sy --noconfirm --needed socat ca-certificates util-linux
     elif command -v zypper >/dev/null 2>&1; then
-        zypper --non-interactive install socat ca-certificates
+        zypper --non-interactive install socat ca-certificates util-linux
         zypper clean --all
     else
         echo "localhost-proxy requires socat, but no supported package manager was found."
@@ -131,6 +131,30 @@ parse_mapping() {
     return 0
 }
 
+launch_socat() {
+    listen_addr="TCP-LISTEN:$listen_port,bind=$listen_host,fork,reuseaddr"
+    target_addr="TCP:$target_host:$target_port"
+
+    if command -v setsid >/dev/null 2>&1; then
+        launcher=setsid
+        setsid socat "$listen_addr" "$target_addr" > "$log_file" 2>&1 < /dev/null &
+    else
+        launcher=nohup
+        nohup socat "$listen_addr" "$target_addr" > "$log_file" 2>&1 < /dev/null &
+    fi
+
+    pid=$!
+    printf '%s\n' "$pid" > "$pid_file"
+    echo "localhost-proxy: launcher=$launcher pid=$pid $listen_host:$listen_port -> $target_host:$target_port" >> "$log_file"
+
+    sleep 1
+    if ! kill -0 "$pid" >/dev/null 2>&1; then
+        echo "localhost-proxy: socat exited shortly after launch for $listen_host:$listen_port -> $target_host:$target_port" >&2
+        echo "localhost-proxy: see $log_file for details" >&2
+        return 1
+    fi
+}
+
 start_mapping() {
     mapping="$1"
 
@@ -146,8 +170,7 @@ start_mapping() {
     log_file="$LOG_DIR/$name.log"
     pid_file="$RUN_DIR/$name.pid"
 
-    nohup socat "TCP-LISTEN:$listen_port,bind=$listen_host,fork,reuseaddr" "TCP:$target_host:$target_port" > "$log_file" 2>&1 &
-    printf '%s\n' "$!" > "$pid_file"
+    launch_socat
     echo "localhost-proxy: forwarding $listen_host:$listen_port -> $target_host:$target_port"
 }
 
