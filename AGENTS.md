@@ -21,6 +21,7 @@ This repository stores reusable Dev Container Features that are published to Git
 - Prefer small, composable features with a single clear responsibility.
 - Keep shell scripts POSIX `sh` unless a stronger shell requirement is necessary.
 - Make feature installs idempotent so reruns do not duplicate configuration.
+- For long-running processes started from lifecycle commands such as `postStartCommand`, prefer launching them with `setsid` and fall back to `nohup` when `setsid` is unavailable. This helps detach the background process from the lifecycle command's process group.
 - Avoid bundling tools that are better provided by a base image or a separate feature unless the feature's purpose is installation itself.
 
 ## Release Expectations

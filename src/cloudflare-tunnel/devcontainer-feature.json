@@ -1,0 +1,15 @@
+{
+    "name": "Cloudflare Tunnel",
+    "id": "cloudflare-tunnel",
+    "version": "1.0.0",
+    "description": "Installs cloudflared and starts a Cloudflare Tunnel from a token when the dev container starts.",
+    "documentationURL": "https://raw.githubusercontent.com/zjx20/devcontainer-features/main/src/cloudflare-tunnel/README.md",
+    "options": {
+        "token": {
+            "type": "string",
+            "default": "",
+            "description": "Cloudflare Tunnel token used by 'cloudflared tunnel --protocol http2 run --token ...'."
+        }
+    },
+    "postStartCommand": "cloudflare-tunnel-start"
+}

@@ -7,6 +7,7 @@ This repository is a collection of reusable [Dev Container Features](https://con
 | Feature | Purpose | Docs |
 | --- | --- | --- |
 | `claude-yolo` | Adds a `claude-yolo` shell alias that runs `claude --dangerously-skip-permissions`. | [src/claude-yolo/README.md](src/claude-yolo/README.md) |
+| `cloudflare-tunnel` | Installs `cloudflared` and starts a Cloudflare Tunnel from a token when the dev container starts. | [src/cloudflare-tunnel/README.md](src/cloudflare-tunnel/README.md) |
 | `codex-yolo` | Installs the Codex CLI and adds a `codex-yolo` shell alias for bypass mode. | [src/codex-yolo/README.md](src/codex-yolo/README.md) |
 | `google-antigravity` | Installs the Google Antigravity CLI and adds an `agy-yolo` alias. | [src/google-antigravity/README.md](src/google-antigravity/README.md) |
 | `localhost-proxy` | Forwards localhost ports inside the dev container to host.docker.internal or other TCP targets. | [src/localhost-proxy/README.md](src/localhost-proxy/README.md) |
